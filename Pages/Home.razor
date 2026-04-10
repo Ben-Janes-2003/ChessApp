@@ -9,10 +9,11 @@
             bool isDark = (row + col) % 2 != 0;
             <div class="square @(isDark ? "dark" : "light")">
                 @{
-                    char? symbol = Board.Spaces[row, col]?.Symbol;
-                    if (symbol is not null)
+                    Piece? piece = Board.Spaces[row, col];
+                    char? symbol = piece?.Symbol;
+                    if (symbol is not null && piece is not null)
                     {
-                        <div class="piece">
+                        <div class="piece @(piece == Board.SelectedPiece ? "selected" : "")" @onclick="() => SelectPiece(piece)">
                             @symbol
                         </div>
                     }
