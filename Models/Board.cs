@@ -4,8 +4,9 @@ namespace ChessApp.Models;
 
 public class Board
 {
-    public Piece[,] Spaces { get; set; } = new Piece[8, 8];
-    public State State { get; set; } = new();
+    public Piece[,] Spaces { get; private set; } = new Piece[8, 8];
+    public Colour CurrentPlayer { get; private set; } = Colour.white;
+    public Piece? SelectedPiece { get; private set; }
 
     public void Initialise()
     {
@@ -42,5 +43,16 @@ public class Board
         Spaces[7, 5] = new Piece(Colour.white, PieceType.Bishop);
         Spaces[7, 6] = new Piece(Colour.white, PieceType.Knight);
         Spaces[7, 7] = new Piece(Colour.white, PieceType.Rook);
+    }
+
+    public void SelectPiece(Piece piece)
+    {
+        if (piece.Colour != CurrentPlayer) return;
+        if (piece == SelectedPiece)
+        {
+            SelectedPiece = null;
+            return;
+        }
+        SelectedPiece = piece;
     }
 }

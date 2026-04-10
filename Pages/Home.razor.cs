@@ -10,4 +10,9 @@ public partial class Home
     {
         Board.Initialise();
     }
+
+    private void SelectPiece(Piece piece)
+    {
+        Board.SelectPiece(piece);
+    }
 }

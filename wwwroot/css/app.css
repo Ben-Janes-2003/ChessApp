@@ -88,34 +88,69 @@ code {
     text-align: start;
 }
 
+:root {
+    --board-light: #f0d9b5;
+    --board-dark: #b58863;
+    --selection-color: rgba(255, 255, 0, 0.45);
+    --hover-color: rgba(255, 255, 255, 0.15);
+    --square-size: 80px;
+    --piece-font-size: 56px;
+}
+
 .chess-board {
     display: grid;
-    grid-template-columns: repeat(8, 50px);
-    grid-template-rows: repeat(8, 50px);
-    border: 2px solid #333;
+    grid-template-columns: repeat(8, var(--square-size));
+    grid-template-rows: repeat(8, var(--square-size));
+    border: 8px solid #4a3b31;
+    border-radius: 4px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
     width: fit-content;
-    -webkit-user-select: none;
-    -ms-user-select: none;
+    margin: 3rem auto;
     user-select: none;
+    background-color: #4a3b31;
 }
 
 .square {
-    width: 50px;
-    height: 50px;
+    width: var(--square-size);
+    height: var(--square-size);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    position: relative;
 }
 
 .square.light {
-    background-color: #f0d9b5;
+    background-color: var(--board-light);
 }
 
 .square.dark {
-    background-color: #b58863;
+    background-color: var(--board-dark);
 }
 
 .piece {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--piece-font-size);
     cursor: pointer;
+    transition: transform 0.2s ease-out, background-color 0.2s ease-out, box-shadow 0.2s ease-out;
+    z-index: 2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    will-change: transform;
 }
+
+.piece:hover {
+    background-color: var(--hover-color);
+}
+
+.piece.selected {
+    background-color: var(--selection-color);
+    box-shadow: inset 0 0 0 4px rgba(255, 255, 0, 0.6);
+    transform: scale(1.1);
+    z-index: 10;
+}
+
+/* Add a subtle highlight to indicate which turn it is if needed, 
+   but for now we focus on the selected state */
