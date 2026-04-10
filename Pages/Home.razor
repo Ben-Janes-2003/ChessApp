@@ -1,0 +1,23 @@
+﻿@page "/"
+@using ChessApp.Models
+
+<div class="chess-board">
+    @for (int row = 0; row < 8; row++)
+    {
+        @for (int col = 0; col < 8; col++)
+        {
+            bool isDark = (row + col) % 2 != 0;
+            <div class="square @(isDark ? "dark" : "light")">
+                @{
+                    char? symbol = Board.Spaces[row, col]?.Symbol;
+                    if (symbol is not null)
+                    {
+                        <div class="piece">
+                            @symbol
+                        </div>
+                    }
+                }
+            </div>
+        }
+    }
+</div>
