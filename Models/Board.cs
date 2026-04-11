@@ -76,7 +76,7 @@ public class Board
         };
     }
 
-    // TODO: Add En-Passant logic
+    // TODO: Add en passant logic
     private HashSet<Coordinate> GetEligibleSquaresPawn(PieceContext context, bool hasMoved)
     {
         HashSet<Coordinate> validMoves = new();
@@ -135,6 +135,7 @@ public class Board
         return validMoves;
     }
 
+    // TODO: Add castling logic
     private HashSet<Coordinate> GetEligibleSquaresKing(PieceContext context)
     {
         int[] offsets = { -1, 0, 1 };
