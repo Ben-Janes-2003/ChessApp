@@ -112,7 +112,12 @@ public class Board
 
     private HashSet<Coordinate> GetEligibleSpacesQueen(Coordinate currentPosition, Colour pieceColour)
     {
-        return new();
+        HashSet<Coordinate> validRookMoves = GetEligibleSpacesRook(currentPosition, pieceColour);
+        HashSet<Coordinate> validBishopMoves = GetEligibleSpacesBishop(currentPosition, pieceColour);
+
+        HashSet<Coordinate> validMoves = new(validRookMoves);
+        validMoves.UnionWith(validBishopMoves);
+        return validMoves;
     }
 
     private HashSet<Coordinate> GetEligibleSpacesKing(Coordinate currentPosition, Colour pieceColour)
