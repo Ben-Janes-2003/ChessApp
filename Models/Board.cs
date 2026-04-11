@@ -105,27 +105,14 @@ public class Board
 
     private HashSet<Coordinate> GetEligibleSquaresRook(PieceContext context)
     {
-        HashSet<Coordinate> validMoves = new();
         Vector[] vectors = new Vector[] { new(0, 1), new(0, -1), new(1, 0), new(-1, 0) };
-        Coordinate currentPosition = context.CurrentPosition;
-        foreach (Vector vector in vectors)
-        {
-            Coordinate lastPosition = currentPosition;
-            while (true)
-            {
-                Coordinate newPosition = new(lastPosition.Row + vector.RowDirection, lastPosition.Column + vector.ColumnDirection);
-                if (!IsValidMove(new PieceContext(newPosition, context.PieceColour))) break;
-                validMoves.Add(newPosition);
-                lastPosition = newPosition;
-                if (GetSquareByCoordinate(newPosition) is not null) break;
-            }
-        }
-        return validMoves;
+        return GetValidMovesByVectors(vectors, context);
     }
 
     private HashSet<Coordinate> GetEligibleSquaresBishop(PieceContext context)
     {
-        return new();
+        Vector[] vectors = new Vector[] { new(1, 1), new(1, -1), new(-1, 1), new(-1, -1) };
+        return GetValidMovesByVectors(vectors, context);
     }
 
     private HashSet<Coordinate> GetEligibleSquaresKnight(PieceContext context)
@@ -207,6 +194,25 @@ public class Board
 
                 PieceContext newContext = new(newPosition, context.PieceColour);
                 if (IsValidMove(newContext)) validMoves.Add(newPosition);
+            }
+        }
+        return validMoves;
+    }
+
+    private HashSet<Coordinate> GetValidMovesByVectors(Vector[] vectors, PieceContext context)
+    {
+        HashSet<Coordinate> validMoves = new();
+        Coordinate currentPosition = context.CurrentPosition;
+        foreach (Vector vector in vectors)
+        {
+            Coordinate lastPosition = currentPosition;
+            while (true)
+            {
+                Coordinate newPosition = new(lastPosition.Row + vector.RowDirection, lastPosition.Column + vector.ColumnDirection);
+                if (!IsValidMove(new PieceContext(newPosition, context.PieceColour))) break;
+                validMoves.Add(newPosition);
+                lastPosition = newPosition;
+                if (GetSquareByCoordinate(newPosition) is not null) break;
             }
         }
         return validMoves;
