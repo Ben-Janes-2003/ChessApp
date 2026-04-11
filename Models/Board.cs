@@ -243,6 +243,13 @@ public class Board
 
     private Piece? GetSquareByCoordinate(Coordinate coordinate)
     {
-        return Squares[coordinate.Row, coordinate.Column];
+        try
+        {
+            return Squares[coordinate.Row, coordinate.Column];
+        }
+        catch (IndexOutOfRangeException)
+        {
+            return null;
+        }
     }
 }
