@@ -6,10 +6,11 @@
     {
         @for (int col = 0; col < 8; col++)
         {
+            Coordinate coordinate = new(row, col);
             bool isDark = (row + col) % 2 != 0;
-            <div class="square @(isDark ? "dark" : "light")">
+            <div class="square @(isDark ? "dark" : "light") @(Board.EligibleSquaresForSelectedPiece.Contains(coordinate) ? "eligible" : "")">
                 @{
-                    Piece? piece = Board.Spaces[row, col];
+                    Piece? piece = Board.Squares[row, col];
                     char? symbol = piece?.Symbol;
                     if (symbol is not null && piece is not null)
                     {

@@ -7,6 +7,7 @@ public class Piece
     public PieceType Type { get; set; }
     public Colour Colour { get; set; }
     public char Symbol => GetSymbol();
+    public bool HasMoved;
 
     public Piece(Colour colour, PieceType type)
     {
