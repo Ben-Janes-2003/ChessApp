@@ -4,7 +4,7 @@ namespace ChessApp.Models;
 
 public class Board
 {
-    public Piece[,] Spaces { get; private set; } = new Piece[8, 8];
+    public Piece[,] Squares { get; private set; } = new Piece[8, 8];
     public Colour CurrentPlayer { get; private set; } = Colour.white;
     private Piece? _selectedPiece;
     public Piece? SelectedPiece 
@@ -13,138 +13,129 @@ public class Board
         set 
         { 
             _selectedPiece = GetPieceToSelect(value); 
-            _eligibleSpaces = GetEligibleSpaces(_selectedPiece);
+            _eligibleSquares = GetEligibleSquares(_selectedPiece);
         } 
     }
 
-    private HashSet<Coordinate> _eligibleSpaces = new();
-    public HashSet<Coordinate> EligibleSpacesForSelectedPiece => _eligibleSpaces;
+    private HashSet<Coordinate> _eligibleSquares = new();
+    public HashSet<Coordinate> EligibleSquaresForSelectedPiece => _eligibleSquares;
 
     public void Initialise()
     {
-        Spaces[0, 0] = new Piece(Colour.black, PieceType.Rook);
-        Spaces[0, 1] = new Piece(Colour.black, PieceType.Knight);
-        Spaces[0, 2] = new Piece(Colour.black, PieceType.Bishop);
-        Spaces[0, 3] = new Piece(Colour.black, PieceType.Queen);
-        Spaces[0, 4] = new Piece(Colour.black, PieceType.King);
-        Spaces[0, 5] = new Piece(Colour.black, PieceType.Bishop);
-        Spaces[0, 6] = new Piece(Colour.black, PieceType.Knight);
-        Spaces[0, 7] = new Piece(Colour.black, PieceType.Rook);
-        Spaces[1, 0] = new Piece(Colour.black, PieceType.Pawn);
-        Spaces[1, 1] = new Piece(Colour.black, PieceType.Pawn);
-        Spaces[1, 2] = new Piece(Colour.black, PieceType.Pawn);
-        Spaces[1, 3] = new Piece(Colour.black, PieceType.Pawn);
-        Spaces[1, 4] = new Piece(Colour.black, PieceType.Pawn);
-        Spaces[1, 5] = new Piece(Colour.black, PieceType.Pawn);
-        Spaces[1, 6] = new Piece(Colour.black, PieceType.Pawn);
-        Spaces[1, 7] = new Piece(Colour.black, PieceType.Pawn);
+        Squares[0, 0] = new Piece(Colour.black, PieceType.Rook);
+        Squares[0, 1] = new Piece(Colour.black, PieceType.Knight);
+        Squares[0, 2] = new Piece(Colour.black, PieceType.Bishop);
+        Squares[0, 3] = new Piece(Colour.black, PieceType.Queen);
+        Squares[0, 4] = new Piece(Colour.black, PieceType.King);
+        Squares[0, 5] = new Piece(Colour.black, PieceType.Bishop);
+        Squares[0, 6] = new Piece(Colour.black, PieceType.Knight);
+        Squares[0, 7] = new Piece(Colour.black, PieceType.Rook);
+        Squares[1, 0] = new Piece(Colour.black, PieceType.Pawn);
+        Squares[1, 1] = new Piece(Colour.black, PieceType.Pawn);
+        Squares[1, 2] = new Piece(Colour.black, PieceType.Pawn);
+        Squares[1, 3] = new Piece(Colour.black, PieceType.Pawn);
+        Squares[1, 4] = new Piece(Colour.black, PieceType.Pawn);
+        Squares[1, 5] = new Piece(Colour.black, PieceType.Pawn);
+        Squares[1, 6] = new Piece(Colour.black, PieceType.Pawn);
+        Squares[1, 7] = new Piece(Colour.black, PieceType.Pawn);
 
-        Spaces[6, 0] = new Piece(Colour.white, PieceType.Pawn);
-        Spaces[6, 1] = new Piece(Colour.white, PieceType.Pawn);
-        Spaces[6, 2] = new Piece(Colour.white, PieceType.Pawn);
-        Spaces[6, 3] = new Piece(Colour.white, PieceType.Pawn);
-        Spaces[6, 4] = new Piece(Colour.white, PieceType.Pawn);
-        Spaces[6, 5] = new Piece(Colour.white, PieceType.Pawn);
-        Spaces[6, 6] = new Piece(Colour.white, PieceType.Pawn);
-        Spaces[6, 7] = new Piece(Colour.white, PieceType.Pawn);
-        Spaces[7, 0] = new Piece(Colour.white, PieceType.Rook);
-        Spaces[7, 1] = new Piece(Colour.white, PieceType.Knight);
-        Spaces[7, 2] = new Piece(Colour.white, PieceType.Bishop);
-        Spaces[7, 3] = new Piece(Colour.white, PieceType.Queen);
-        Spaces[7, 4] = new Piece(Colour.white, PieceType.King);
-        Spaces[7, 5] = new Piece(Colour.white, PieceType.Bishop);
-        Spaces[7, 6] = new Piece(Colour.white, PieceType.Knight);
-        Spaces[7, 7] = new Piece(Colour.white, PieceType.Rook);
+        Squares[6, 0] = new Piece(Colour.white, PieceType.Pawn);
+        Squares[6, 1] = new Piece(Colour.white, PieceType.Pawn);
+        Squares[6, 2] = new Piece(Colour.white, PieceType.Pawn);
+        Squares[6, 3] = new Piece(Colour.white, PieceType.Pawn);
+        Squares[6, 4] = new Piece(Colour.white, PieceType.Pawn);
+        Squares[6, 5] = new Piece(Colour.white, PieceType.Pawn);
+        Squares[6, 6] = new Piece(Colour.white, PieceType.Pawn);
+        Squares[6, 7] = new Piece(Colour.white, PieceType.Pawn);
+        Squares[7, 0] = new Piece(Colour.white, PieceType.Rook);
+        Squares[7, 1] = new Piece(Colour.white, PieceType.Knight);
+        Squares[7, 2] = new Piece(Colour.white, PieceType.Bishop);
+        Squares[7, 3] = new Piece(Colour.white, PieceType.Queen);
+        Squares[7, 4] = new Piece(Colour.white, PieceType.King);
+        Squares[7, 5] = new Piece(Colour.white, PieceType.Bishop);
+        Squares[7, 6] = new Piece(Colour.white, PieceType.Knight);
+        Squares[7, 7] = new Piece(Colour.white, PieceType.Rook);
     }
 
-    public HashSet<Coordinate> GetEligibleSpaces(Piece? piece)
+    public HashSet<Coordinate> GetEligibleSquares(Piece? piece)
     {
         if (piece is null) return new();
         Coordinate? currentPosition = GetPieceLocation(piece);
         Colour pieceColour = piece.Colour;
         if (currentPosition is null) return new();
+        PieceContext context = new(currentPosition, pieceColour);
         return piece.Type switch
         {
-            PieceType.Pawn => GetEligibleSpacesPawn(currentPosition, pieceColour),
-            PieceType.Rook => GetEligibleSpacesRook(currentPosition, pieceColour),
-            PieceType.Bishop => GetEligibleSpacesBishop(currentPosition, pieceColour),
-            PieceType.Knight => GetEligibleSpacesKnight(currentPosition, pieceColour),
-            PieceType.Queen => GetEligibleSpacesQueen(currentPosition, pieceColour),
-            PieceType.King => GetEligibleSpacesKing(currentPosition, pieceColour),
+            PieceType.Pawn => GetEligibleSquaresPawn(context),
+            PieceType.Rook => GetEligibleSquaresRook(context),
+            PieceType.Bishop => GetEligibleSquaresBishop(context),
+            PieceType.Knight => GetEligibleSquaresKnight(context),
+            PieceType.Queen => GetEligibleSquaresQueen(context),
+            PieceType.King => GetEligibleSquaresKing(context),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
 
-    private HashSet<Coordinate> GetEligibleSpacesPawn(Coordinate currentPosition, Colour pieceColour)
+    private HashSet<Coordinate> GetEligibleSquaresPawn(PieceContext context)
     {
         return new();
     }
 
-    private HashSet<Coordinate> GetEligibleSpacesRook(Coordinate currentPosition, Colour pieceColour)
+    private HashSet<Coordinate> GetEligibleSquaresRook(PieceContext context)
     {
         return new();
     }
 
-    private HashSet<Coordinate> GetEligibleSpacesBishop(Coordinate currentPosition, Colour pieceColour)
+    private HashSet<Coordinate> GetEligibleSquaresBishop(PieceContext context)
     {
         return new();
     }
 
-    private HashSet<Coordinate> GetEligibleSpacesKnight(Coordinate currentPosition, Colour pieceColour)
+    private HashSet<Coordinate> GetEligibleSquaresKnight(PieceContext context)
     {
-        HashSet<Coordinate> validMoves = new();
         int[] offsets = { -2, -1, 1, 2 };
-        foreach (int deltaRowCoordinate in offsets)
-        {
-            foreach (int deltaColumnCoordinate in offsets)
-            {
-                if (Math.Abs(deltaRowCoordinate) == Math.Abs(deltaColumnCoordinate)) continue;
 
-                Coordinate newPosition = new(
-                    currentPosition.Row + deltaRowCoordinate,
-                    currentPosition.Column + deltaColumnCoordinate);
-
-                if (isValidMove(newPosition, pieceColour)) validMoves.Add(newPosition);
-            }
-        }
-        return validMoves;
+        return GetValidMovesByOffsets(offsets,
+            context,
+            skipDeltaWhere: (Coordinate coordinateDelta) =>
+                IsDiagonalOffset(coordinateDelta));
     }
 
-    private HashSet<Coordinate> GetEligibleSpacesQueen(Coordinate currentPosition, Colour pieceColour)
+    private HashSet<Coordinate> GetEligibleSquaresQueen(PieceContext context)
     {
-        HashSet<Coordinate> validRookMoves = GetEligibleSpacesRook(currentPosition, pieceColour);
-        HashSet<Coordinate> validBishopMoves = GetEligibleSpacesBishop(currentPosition, pieceColour);
+        HashSet<Coordinate> validRookMoves = GetEligibleSquaresRook(context);
+        HashSet<Coordinate> validBishopMoves = GetEligibleSquaresBishop(context);
 
         HashSet<Coordinate> validMoves = new(validRookMoves);
         validMoves.UnionWith(validBishopMoves);
         return validMoves;
     }
 
-    private HashSet<Coordinate> GetEligibleSpacesKing(Coordinate currentPosition, Colour pieceColour)
+    private HashSet<Coordinate> GetEligibleSquaresKing(PieceContext context)
     {
-        HashSet<Coordinate> validMoves = new();
         int[] offsets = { -1, 0, 1 };
-        foreach (int deltaRowCoordinate in offsets)
-        {
-            foreach (int deltaColumnCoordinate in offsets)
-            {
-                if (deltaRowCoordinate == 0 && deltaColumnCoordinate == 0) continue;
 
-                Coordinate newPosition = new(
-                    currentPosition.Row + deltaRowCoordinate,
-                    currentPosition.Column + deltaColumnCoordinate);
-
-                if (isValidMove(newPosition, pieceColour)) validMoves.Add(newPosition);
-            }
-        }
-        return validMoves;
+        return GetValidMovesByOffsets(offsets,
+            context,
+            skipDeltaWhere: (Coordinate coordinateDelta) =>
+                IsZeroOffset(coordinateDelta));
     }
 
-    private bool isValidMove(Coordinate position, Colour friendlyColour)
+    private bool IsZeroOffset(Coordinate coordinateDelta)
     {
-        return !(IsOutOfBounds(position) ||
-            IsOccupliedByFriendly(position, friendlyColour) ||
-            WouldTakeKing(position, friendlyColour));
+        return coordinateDelta.Row == 0 && coordinateDelta.Column == 0;
+    }
+
+    private bool IsDiagonalOffset(Coordinate coordinateDelta)
+    {
+        return Math.Abs(coordinateDelta.Row) == Math.Abs(coordinateDelta.Column);
+    }
+
+    private bool IsValidMove(PieceContext context)
+    {
+        return !(IsOutOfBounds(context.CurrentPosition) ||
+            IsOccupliedByFriendly(context) ||
+            WouldTakeKing(context));
     }
 
     private bool IsOutOfBounds(Coordinate position)
@@ -153,14 +144,37 @@ public class Board
             position.Column < 0 || position.Column > 7;
     }
 
-    private bool WouldTakeKing(Coordinate position, Colour friendlyColour)
+    private bool WouldTakeKing(PieceContext context)
     {
-        return !IsOccupliedByFriendly(position, friendlyColour) && Spaces[position.Row, position.Column]?.Type == PieceType.King;
+        Coordinate position = context.CurrentPosition;
+        return !IsOccupliedByFriendly(context) && Squares[position.Row, position.Column]?.Type == PieceType.King;
     }
 
-    private bool IsOccupliedByFriendly(Coordinate position, Colour friendlyColour)
+    private bool IsOccupliedByFriendly(PieceContext context)
     {
-        return Spaces[position.Row, position.Column]?.Colour == friendlyColour;
+        Coordinate position = context.CurrentPosition;
+        return Squares[position.Row, position.Column]?.Colour == context.PieceColour;
+    }
+
+    private HashSet<Coordinate> GetValidMovesByOffsets(int[] offsets, PieceContext context, Func<Coordinate, bool>? skipDeltaWhere = null)
+    {
+        HashSet<Coordinate> validMoves = new();
+        foreach (int deltaRowCoordinate in offsets)
+        {
+            foreach (int deltaColumnCoordinate in offsets)
+            {
+                Coordinate coordinateDelta = new(deltaRowCoordinate, deltaColumnCoordinate);
+                if (skipDeltaWhere is not null && skipDeltaWhere(coordinateDelta)) continue;
+
+                Coordinate newPosition = new(
+                    context.CurrentPosition.Row + deltaRowCoordinate,
+                    context.CurrentPosition.Column + deltaColumnCoordinate);
+
+                PieceContext newContext = new(newPosition, context.PieceColour);
+                if (IsValidMove(newContext)) validMoves.Add(newPosition);
+            }
+        }
+        return validMoves;
     }
 
     private Coordinate? GetPieceLocation(Piece piece)
@@ -169,7 +183,7 @@ public class Board
         {
             for (int col = 0; col < 8; col++)
             {
-                if (Spaces[row, col] == piece) return new(row, col);
+                if (Squares[row, col] == piece) return new(row, col);
             }
         }
         return null;
