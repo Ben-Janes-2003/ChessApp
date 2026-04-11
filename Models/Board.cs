@@ -122,7 +122,22 @@ public class Board
 
     private HashSet<Coordinate> GetEligibleSpacesKing(Coordinate currentPosition, Colour pieceColour)
     {
-        return new();
+        HashSet<Coordinate> validMoves = new();
+        int[] offsets = { -1, 0, 1 };
+        foreach (int deltaRowCoordinate in offsets)
+        {
+            foreach (int deltaColumnCoordinate in offsets)
+            {
+                if (deltaRowCoordinate == 0 && deltaColumnCoordinate == 0) continue;
+
+                Coordinate newPosition = new(
+                    currentPosition.Row + deltaRowCoordinate,
+                    currentPosition.Column + deltaColumnCoordinate);
+
+                if (isValidMove(newPosition, pieceColour)) validMoves.Add(newPosition);
+            }
+        }
+        return validMoves;
     }
 
     private bool isValidMove(Coordinate position, Colour friendlyColour)
