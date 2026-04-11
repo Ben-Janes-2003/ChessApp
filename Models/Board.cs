@@ -66,7 +66,7 @@ public class Board
         PieceContext context = new(currentPosition, pieceColour);
         return piece.Type switch
         {
-            PieceType.Pawn => GetEligibleSquaresPawn(context),
+            PieceType.Pawn => GetEligibleSquaresPawn(context, piece.HasMoved),
             PieceType.Rook => GetEligibleSquaresRook(context),
             PieceType.Bishop => GetEligibleSquaresBishop(context),
             PieceType.Knight => GetEligibleSquaresKnight(context),
@@ -76,9 +76,31 @@ public class Board
         };
     }
 
-    private HashSet<Coordinate> GetEligibleSquaresPawn(PieceContext context)
+    // TODO: Add En-Passant logic
+    private HashSet<Coordinate> GetEligibleSquaresPawn(PieceContext context, bool hasMoved)
     {
-        return new();
+        HashSet<Coordinate> validMoves = new();
+        int moveableDirection = context.PieceColour == Colour.white ? -1 : 1;
+        Coordinate currentPosition = context.CurrentPosition;
+
+        Coordinate oneSpace = new(currentPosition.Row + moveableDirection, currentPosition.Column);
+        if (GetSquareByCoordinate(oneSpace) is null) validMoves.Add(oneSpace);
+
+        foreach (int columnDelta in new int[] { -1, 1 })
+        {
+            Coordinate diagonal = new(oneSpace.Row, oneSpace.Column + columnDelta);
+            if (!IsValidMove(context)) continue;
+            if (GetSquareByCoordinate(diagonal) is not null) validMoves.Add(diagonal);
+        }
+
+        if (!validMoves.Contains(oneSpace)) return validMoves;
+
+        if (!hasMoved)
+        {
+            Coordinate twoSpaces = new(oneSpace.Row + moveableDirection, currentPosition.Column);
+            if (GetSquareByCoordinate(twoSpaces) is null) validMoves.Add(twoSpaces);
+        }
+        return validMoves;
     }
 
     private HashSet<Coordinate> GetEligibleSquaresRook(PieceContext context)
@@ -146,29 +168,27 @@ public class Board
 
     private bool WouldTakeKing(PieceContext context)
     {
-        Coordinate position = context.CurrentPosition;
-        return !IsOccupliedByFriendly(context) && Squares[position.Row, position.Column]?.Type == PieceType.King;
+        return !IsOccupliedByFriendly(context) && GetSquareByCoordinate(context.CurrentPosition)?.Type == PieceType.King;
     }
 
     private bool IsOccupliedByFriendly(PieceContext context)
     {
-        Coordinate position = context.CurrentPosition;
-        return Squares[position.Row, position.Column]?.Colour == context.PieceColour;
+        return GetSquareByCoordinate(context.CurrentPosition)?.Colour == context.PieceColour;
     }
 
     private HashSet<Coordinate> GetValidMovesByOffsets(int[] offsets, PieceContext context, Func<Coordinate, bool>? skipDeltaWhere = null)
     {
         HashSet<Coordinate> validMoves = new();
-        foreach (int deltaRowCoordinate in offsets)
+        foreach (int rowDelta in offsets)
         {
-            foreach (int deltaColumnCoordinate in offsets)
+            foreach (int columnDelta in offsets)
             {
-                Coordinate coordinateDelta = new(deltaRowCoordinate, deltaColumnCoordinate);
+                Coordinate coordinateDelta = new(rowDelta, columnDelta);
                 if (skipDeltaWhere is not null && skipDeltaWhere(coordinateDelta)) continue;
 
                 Coordinate newPosition = new(
-                    context.CurrentPosition.Row + deltaRowCoordinate,
-                    context.CurrentPosition.Column + deltaColumnCoordinate);
+                    context.CurrentPosition.Row + rowDelta,
+                    context.CurrentPosition.Column + columnDelta);
 
                 PieceContext newContext = new(newPosition, context.PieceColour);
                 if (IsValidMove(newContext)) validMoves.Add(newPosition);
@@ -197,5 +217,10 @@ public class Board
         if (deselectPiece) return null;
         if (piece!.Colour != CurrentPlayer) return SelectedPiece;
         return piece;
+    }
+
+    private Piece? GetSquareByCoordinate(Coordinate coordinate)
+    {
+        return Squares[coordinate.Row, coordinate.Column];
     }
 }
