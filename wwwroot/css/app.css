@@ -92,6 +92,7 @@ code {
     --board-light: #f0d9b5;
     --board-dark: #b58863;
     --selection-color: rgba(255, 255, 0, 0.45);
+    --eligible-color: rgba(0, 0, 0, 0.15);
     --hover-color: rgba(255, 255, 255, 0.15);
     --square-size: 80px;
     --piece-font-size: 56px;
@@ -119,13 +120,31 @@ code {
     position: relative;
 }
 
-.square.light {
-    background-color: var(--board-light);
-}
+    .square.light {
+        background-color: var(--board-light);
+    }
 
-.square.dark {
-    background-color: var(--board-dark);
-}
+    .square.dark {
+        background-color: var(--board-dark);
+    }
+
+    .square.eligible::after {
+        content: "";
+        width: 24px;
+        height: 24px;
+        background-color: var(--eligible-color);
+        border-radius: 50%;
+        position: absolute;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .square.eligible:has(.piece)::after {
+        width: calc(var(--square-size) - 10px);
+        height: calc(var(--square-size) - 10px);
+        background-color: transparent;
+        border: 6px solid var(--eligible-color);
+    }
 
 .piece {
     width: 100%;
@@ -141,16 +160,13 @@ code {
     will-change: transform;
 }
 
-.piece:hover {
-    background-color: var(--hover-color);
-}
+    .piece:hover {
+        background-color: var(--hover-color);
+    }
 
-.piece.selected {
-    background-color: var(--selection-color);
-    box-shadow: inset 0 0 0 4px rgba(255, 255, 0, 0.6);
-    transform: scale(1.1);
-    z-index: 10;
-}
-
-/* Add a subtle highlight to indicate which turn it is if needed, 
-   but for now we focus on the selected state */
+    .piece.selected {
+        background-color: var(--selection-color);
+        box-shadow: inset 0 0 0 4px rgba(255, 255, 0, 0.6);
+        transform: scale(1.1);
+        z-index: 10;
+    }

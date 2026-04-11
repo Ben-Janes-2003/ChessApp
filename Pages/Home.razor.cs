@@ -13,6 +13,6 @@ public partial class Home
 
     private void SelectPiece(Piece piece)
     {
-        Board.SelectPiece(piece);
+        Board.SelectedPiece = piece;
     }
 }

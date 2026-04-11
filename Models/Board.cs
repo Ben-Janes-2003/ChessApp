@@ -6,7 +6,19 @@ public class Board
 {
     public Piece[,] Spaces { get; private set; } = new Piece[8, 8];
     public Colour CurrentPlayer { get; private set; } = Colour.white;
-    public Piece? SelectedPiece { get; private set; }
+    private Piece? _selectedPiece;
+    public Piece? SelectedPiece 
+    { 
+        get => _selectedPiece; 
+        set 
+        { 
+            _selectedPiece = GetPieceToSelect(value); 
+            _eligibleSpaces = GetEligibleSpaces(_selectedPiece);
+        } 
+    }
+
+    private HashSet<Coordinate> _eligibleSpaces = new();
+    public HashSet<Coordinate> EligibleSpacesForSelectedPiece => _eligibleSpaces;
 
     public void Initialise()
     {
@@ -45,14 +57,111 @@ public class Board
         Spaces[7, 7] = new Piece(Colour.white, PieceType.Rook);
     }
 
-    public void SelectPiece(Piece piece)
+    public HashSet<Coordinate> GetEligibleSpaces(Piece? piece)
     {
-        if (piece.Colour != CurrentPlayer) return;
-        if (piece == SelectedPiece)
+        if (piece is null) return new();
+        Coordinate? currentPosition = GetPieceLocation(piece);
+        Colour pieceColour = piece.Colour;
+        if (currentPosition is null) return new();
+        return piece.Type switch
         {
-            SelectedPiece = null;
-            return;
+            PieceType.Pawn => GetEligibleSpacesPawn(currentPosition, pieceColour),
+            PieceType.Rook => GetEligibleSpacesRook(currentPosition, pieceColour),
+            PieceType.Bishop => GetEligibleSpacesBishop(currentPosition, pieceColour),
+            PieceType.Knight => GetEligibleSpacesKnight(currentPosition, pieceColour),
+            PieceType.Queen => GetEligibleSpacesQueen(currentPosition, pieceColour),
+            PieceType.King => GetEligibleSpacesKing(currentPosition, pieceColour),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+
+    private HashSet<Coordinate> GetEligibleSpacesPawn(Coordinate currentPosition, Colour pieceColour)
+    {
+        return new();
+    }
+
+    private HashSet<Coordinate> GetEligibleSpacesRook(Coordinate currentPosition, Colour pieceColour)
+    {
+        return new();
+    }
+
+    private HashSet<Coordinate> GetEligibleSpacesBishop(Coordinate currentPosition, Colour pieceColour)
+    {
+        return new();
+    }
+
+    private HashSet<Coordinate> GetEligibleSpacesKnight(Coordinate currentPosition, Colour pieceColour)
+    {
+        HashSet<Coordinate> validMoves = new();
+        int[] offsets = { -2, -1, 1, 2 };
+        foreach (int deltaRowCoordinate in offsets)
+        {
+            foreach (int deltaColumnCoordinate in offsets)
+            {
+                if (Math.Abs(deltaRowCoordinate) == Math.Abs(deltaColumnCoordinate)) continue;
+
+                Coordinate newPosition = new(
+                    currentPosition.Row + deltaRowCoordinate,
+                    currentPosition.Column + deltaColumnCoordinate);
+
+                if (isValidMove(newPosition, pieceColour)) validMoves.Add(newPosition);
+            }
         }
-        SelectedPiece = piece;
+        return validMoves;
+    }
+
+    private HashSet<Coordinate> GetEligibleSpacesQueen(Coordinate currentPosition, Colour pieceColour)
+    {
+        return new();
+    }
+
+    private HashSet<Coordinate> GetEligibleSpacesKing(Coordinate currentPosition, Colour pieceColour)
+    {
+        return new();
+    }
+
+    private bool isValidMove(Coordinate position, Colour friendlyColour)
+    {
+        return !(IsOutOfBounds(position) ||
+            IsOccupliedByFriendly(position, friendlyColour) ||
+            WouldTakeKing(position, friendlyColour));
+    }
+
+    private bool IsOutOfBounds(Coordinate position)
+    {
+        return position.Row < 0 || position.Row > 7 ||
+            position.Column < 0 || position.Column > 7;
+    }
+
+    private bool WouldTakeKing(Coordinate position, Colour friendlyColour)
+    {
+        return !IsOccupliedByFriendly(position, friendlyColour) && Spaces[position.Row, position.Column]?.Type == PieceType.King;
+    }
+
+    private bool IsOccupliedByFriendly(Coordinate position, Colour friendlyColour)
+    {
+        return Spaces[position.Row, position.Column]?.Colour == friendlyColour;
+    }
+
+    private Coordinate? GetPieceLocation(Piece piece)
+    {
+        for (int row = 0; row < 8; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                if (Spaces[row, col] == piece) return new(row, col);
+            }
+        }
+        return null;
+    }
+
+    private Piece? GetPieceToSelect(Piece? piece)
+    {
+        bool deselectPiece =
+            piece is null ||
+            piece == SelectedPiece;
+        if (deselectPiece) return null;
+        if (piece!.Colour != CurrentPlayer) return SelectedPiece;
+        return piece;
     }
 }
