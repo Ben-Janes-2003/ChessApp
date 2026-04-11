@@ -105,7 +105,22 @@ public class Board
 
     private HashSet<Coordinate> GetEligibleSquaresRook(PieceContext context)
     {
-        return new();
+        HashSet<Coordinate> validMoves = new();
+        Vector[] vectors = new Vector[] { new(0, 1), new(0, -1), new(1, 0), new(-1, 0) };
+        Coordinate currentPosition = context.CurrentPosition;
+        foreach (Vector vector in vectors)
+        {
+            Coordinate lastPosition = currentPosition;
+            while (true)
+            {
+                Coordinate newPosition = new(lastPosition.Row + vector.RowDirection, lastPosition.Column + vector.ColumnDirection);
+                if (!IsValidMove(new PieceContext(newPosition, context.PieceColour))) break;
+                validMoves.Add(newPosition);
+                lastPosition = newPosition;
+                if (GetSquareByCoordinate(newPosition) is not null) break;
+            }
+        }
+        return validMoves;
     }
 
     private HashSet<Coordinate> GetEligibleSquaresBishop(PieceContext context)
