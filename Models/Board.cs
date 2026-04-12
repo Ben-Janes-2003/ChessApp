@@ -5,7 +5,7 @@ namespace ChessApp.Models;
 public class Board
 {
     public Piece?[,] Squares { get; private set; } = new Piece?[8, 8];
-    public Colour CurrentPlayer { get; private set; } = Colour.white;
+    public Colour CurrentPlayer { get; private set; } = Colour.White;
     private Piece? _selectedPiece;
     public Piece? SelectedPiece 
     { 
@@ -22,53 +22,72 @@ public class Board
 
     public void Initialise()
     {
-        Squares[0, 0] = new Piece(Colour.black, PieceType.Rook);
-        Squares[0, 1] = new Piece(Colour.black, PieceType.Knight);
-        Squares[0, 2] = new Piece(Colour.black, PieceType.Bishop);
-        Squares[0, 3] = new Piece(Colour.black, PieceType.Queen);
-        Squares[0, 4] = new Piece(Colour.black, PieceType.King);
-        Squares[0, 5] = new Piece(Colour.black, PieceType.Bishop);
-        Squares[0, 6] = new Piece(Colour.black, PieceType.Knight);
-        Squares[0, 7] = new Piece(Colour.black, PieceType.Rook);
-        Squares[1, 0] = new Piece(Colour.black, PieceType.Pawn);
-        Squares[1, 1] = new Piece(Colour.black, PieceType.Pawn);
-        Squares[1, 2] = new Piece(Colour.black, PieceType.Pawn);
-        Squares[1, 3] = new Piece(Colour.black, PieceType.Pawn);
-        Squares[1, 4] = new Piece(Colour.black, PieceType.Pawn);
-        Squares[1, 5] = new Piece(Colour.black, PieceType.Pawn);
-        Squares[1, 6] = new Piece(Colour.black, PieceType.Pawn);
-        Squares[1, 7] = new Piece(Colour.black, PieceType.Pawn);
+        Squares[0, 0] = new Piece(Colour.Black, PieceType.Rook);
+        Squares[0, 1] = new Piece(Colour.Black, PieceType.Knight);
+        Squares[0, 2] = new Piece(Colour.Black, PieceType.Bishop);
+        Squares[0, 3] = new Piece(Colour.Black, PieceType.Queen);
+        Squares[0, 4] = new Piece(Colour.Black, PieceType.King);
+        Squares[0, 5] = new Piece(Colour.Black, PieceType.Bishop);
+        Squares[0, 6] = new Piece(Colour.Black, PieceType.Knight);
+        Squares[0, 7] = new Piece(Colour.Black, PieceType.Rook);
+        Squares[1, 0] = new Piece(Colour.Black, PieceType.Pawn);
+        Squares[1, 1] = new Piece(Colour.Black, PieceType.Pawn);
+        Squares[1, 2] = new Piece(Colour.Black, PieceType.Pawn);
+        Squares[1, 3] = new Piece(Colour.Black, PieceType.Pawn);
+        Squares[1, 4] = new Piece(Colour.Black, PieceType.Pawn);
+        Squares[1, 5] = new Piece(Colour.Black, PieceType.Pawn);
+        Squares[1, 6] = new Piece(Colour.Black, PieceType.Pawn);
+        Squares[1, 7] = new Piece(Colour.Black, PieceType.Pawn);
 
-        Squares[6, 0] = new Piece(Colour.white, PieceType.Pawn);
-        Squares[6, 1] = new Piece(Colour.white, PieceType.Pawn);
-        Squares[6, 2] = new Piece(Colour.white, PieceType.Pawn);
-        Squares[6, 3] = new Piece(Colour.white, PieceType.Pawn);
-        Squares[6, 4] = new Piece(Colour.white, PieceType.Pawn);
-        Squares[6, 5] = new Piece(Colour.white, PieceType.Pawn);
-        Squares[6, 6] = new Piece(Colour.white, PieceType.Pawn);
-        Squares[6, 7] = new Piece(Colour.white, PieceType.Pawn);
-        Squares[7, 0] = new Piece(Colour.white, PieceType.Rook);
-        Squares[7, 1] = new Piece(Colour.white, PieceType.Knight);
-        Squares[7, 2] = new Piece(Colour.white, PieceType.Bishop);
-        Squares[7, 3] = new Piece(Colour.white, PieceType.Queen);
-        Squares[7, 4] = new Piece(Colour.white, PieceType.King);
-        Squares[7, 5] = new Piece(Colour.white, PieceType.Bishop);
-        Squares[7, 6] = new Piece(Colour.white, PieceType.Knight);
-        Squares[7, 7] = new Piece(Colour.white, PieceType.Rook);
+        Squares[6, 0] = new Piece(Colour.White, PieceType.Pawn);
+        Squares[6, 1] = new Piece(Colour.White, PieceType.Pawn);
+        Squares[6, 2] = new Piece(Colour.White, PieceType.Pawn);
+        Squares[6, 3] = new Piece(Colour.White, PieceType.Pawn);
+        Squares[6, 4] = new Piece(Colour.White, PieceType.Pawn);
+        Squares[6, 5] = new Piece(Colour.White, PieceType.Pawn);
+        Squares[6, 6] = new Piece(Colour.White, PieceType.Pawn);
+        Squares[6, 7] = new Piece(Colour.White, PieceType.Pawn);
+        Squares[7, 0] = new Piece(Colour.White, PieceType.Rook);
+        Squares[7, 1] = new Piece(Colour.White, PieceType.Knight);
+        Squares[7, 2] = new Piece(Colour.White, PieceType.Bishop);
+        Squares[7, 3] = new Piece(Colour.White, PieceType.Queen);
+        Squares[7, 4] = new Piece(Colour.White, PieceType.King);
+        Squares[7, 5] = new Piece(Colour.White, PieceType.Bishop);
+        Squares[7, 6] = new Piece(Colour.White, PieceType.Knight);
+        Squares[7, 7] = new Piece(Colour.White, PieceType.Rook);
     }
 
-    public void MoveSelectedPieceTo(Coordinate position)
+    public void MoveSelectedPieceTo(Coordinate position, bool castling = false)
     {
-        if (EligibleSquaresForSelectedPiece.Contains(position) && SelectedPiece is not null)
+        if (SelectedPiece is not null && (EligibleSquaresForSelectedPiece.Contains(position) || castling))
         {
             Coordinate? previousPosition = GetPieceLocation(SelectedPiece);
             if (previousPosition is null) return;
             SetSquareByCoordinate(position, SelectedPiece);
             SetSquareByCoordinate(previousPosition, null);
             SelectedPiece.HasMoved = true;
+            if (SelectedPiece.Type == PieceType.King)
+            {
+                int columnDelta = position.Column - previousPosition.Column;
+                int rookRow = CurrentPlayer == Colour.White ? 7 : 0;
+                if (Math.Abs(columnDelta) == 2)
+                {
+                    Castle(rookRow, columnDelta);
+                    return;
+                }
+            }
             SelectedPiece = null;
-            CurrentPlayer = CurrentPlayer == Colour.white ? Colour.black : Colour.white;
+            CurrentPlayer = CurrentPlayer == Colour.White ? Colour.Black : Colour.White;
         }
+    }
+
+    private void Castle(int rookRow, int columnDelta)
+    {
+        (int currentRookColumn, int newRookColumn) = columnDelta == -2 ? (0, 3) : (7, 5);
+        Coordinate rookCoordinate = new(rookRow, currentRookColumn);
+        SelectedPiece = GetSquareByCoordinate(rookCoordinate);
+        Coordinate newRookCoordinate = new(rookRow, newRookColumn);
+        MoveSelectedPieceTo(newRookCoordinate, castling: true);
     }
 
     private HashSet<Coordinate> GetEligibleSquares(Piece? piece)
@@ -85,7 +104,7 @@ public class Board
             PieceType.Bishop => GetEligibleSquaresBishop(context),
             PieceType.Knight => GetEligibleSquaresKnight(context),
             PieceType.Queen => GetEligibleSquaresQueen(context),
-            PieceType.King => GetEligibleSquaresKing(context),
+            PieceType.King => GetEligibleSquaresKing(context, piece.HasMoved),
             _ => throw new ArgumentOutOfRangeException()
         };
     }
@@ -94,7 +113,7 @@ public class Board
     private HashSet<Coordinate> GetEligibleSquaresPawn(PieceContext context, bool hasMoved)
     {
         HashSet<Coordinate> validMoves = new();
-        int moveableDirection = context.FriendlyColour == Colour.white ? -1 : 1;
+        int moveableDirection = context.FriendlyColour == Colour.White ? -1 : 1;
         Coordinate currentPosition = context.Position;
 
         Coordinate oneSpace = new(currentPosition.Row + moveableDirection, currentPosition.Column);
@@ -150,15 +169,40 @@ public class Board
         return validMoves;
     }
 
-    // TODO: Add castling logic
-    private HashSet<Coordinate> GetEligibleSquaresKing(PieceContext context)
+    // TODO: Add castling logic (can't move through check)
+    private HashSet<Coordinate> GetEligibleSquaresKing(PieceContext context, bool hasMoved)
     {
+        HashSet<Coordinate> validMoves = new();
         int[] offsets = { -1, 0, 1 };
 
-        return GetValidMovesByOffsets(offsets,
+        validMoves = GetValidMovesByOffsets(offsets,
             context,
             skipDeltaWhere: (Coordinate coordinateDelta) =>
                 IsZeroOffset(coordinateDelta));
+
+        if (hasMoved) return validMoves;
+        int rookRow = context.FriendlyColour == Colour.White ? 7 : 0;
+        foreach (int rookColumn in new int[] {0, 7})
+        {
+            Coordinate rookCoordinate = new(rookRow, rookColumn);
+            Piece? rook = GetSquareByCoordinate(rookCoordinate);
+            if (rook is not null &&
+                rook.Type == PieceType.Rook &&
+                !rook.HasMoved)
+            {
+                int currentKingColumn = context.Position.Column;
+                int kingColumnDirection = rookColumn > currentKingColumn ?  1 : -1;
+                int columnBeforeKing = currentKingColumn + kingColumnDirection;
+                PieceContext rookContext = new(rookCoordinate, context.FriendlyColour);
+                Coordinate newRookCoordinate = new(rookRow, columnBeforeKing);
+                if (GetEligibleSquaresRook(rookContext).Contains(newRookCoordinate))
+                {
+                    Coordinate newKingCoordinate = new(rookRow, columnBeforeKing + kingColumnDirection);
+                    validMoves.Add(newKingCoordinate);
+                }
+            }
+        }
+        return validMoves;
     }
 
     private bool IsZeroOffset(Coordinate coordinateDelta)

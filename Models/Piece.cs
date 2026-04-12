@@ -19,12 +19,12 @@ public class Piece
     {
         return Type switch
         {
-            PieceType.Pawn => Colour == Colour.white ? '♙' : '♟',
-            PieceType.Rook => Colour == Colour.white ? '♖' : '♜',
-            PieceType.Bishop => Colour == Colour.white ? '♗' : '♝',
-            PieceType.Knight => Colour == Colour.white ? '♘' : '♞',
-            PieceType.Queen => Colour == Colour.white ? '♕' : '♛',
-            PieceType.King => Colour == Colour.white ? '♔' : '♚',
+            PieceType.Pawn => Colour == Colour.White ? '♙' : '♟',
+            PieceType.Rook => Colour == Colour.White ? '♖' : '♜',
+            PieceType.Bishop => Colour == Colour.White ? '♗' : '♝',
+            PieceType.Knight => Colour == Colour.White ? '♘' : '♞',
+            PieceType.Queen => Colour == Colour.White ? '♕' : '♛',
+            PieceType.King => Colour == Colour.White ? '♔' : '♚',
             _ => throw new ArgumentOutOfRangeException()
         };
     }
