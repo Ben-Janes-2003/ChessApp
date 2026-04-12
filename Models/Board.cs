@@ -4,7 +4,7 @@ namespace ChessApp.Models;
 
 public class Board
 {
-    public Piece[,] Squares { get; private set; } = new Piece[8, 8];
+    public Piece?[,] Squares { get; private set; } = new Piece?[8, 8];
     public Colour CurrentPlayer { get; private set; } = Colour.white;
     private Piece? _selectedPiece;
     public Piece? SelectedPiece 
@@ -57,7 +57,21 @@ public class Board
         Squares[7, 7] = new Piece(Colour.white, PieceType.Rook);
     }
 
-    public HashSet<Coordinate> GetEligibleSquares(Piece? piece)
+    public void MoveSelectedPieceTo(Coordinate position)
+    {
+        if (EligibleSquaresForSelectedPiece.Contains(position) && SelectedPiece is not null)
+        {
+            Coordinate? previousPosition = GetPieceLocation(SelectedPiece);
+            if (previousPosition is null) return;
+            SetSquareByCoordinate(position, SelectedPiece);
+            SetSquareByCoordinate(previousPosition, null);
+            SelectedPiece.HasMoved = true;
+            SelectedPiece = null;
+            CurrentPlayer = CurrentPlayer == Colour.white ? Colour.black : Colour.white;
+        }
+    }
+
+    private HashSet<Coordinate> GetEligibleSquares(Piece? piece)
     {
         if (piece is null) return new();
         Coordinate? currentPosition = GetPieceLocation(piece);
@@ -251,5 +265,10 @@ public class Board
         {
             return null;
         }
+    }
+
+    private void SetSquareByCoordinate(Coordinate coordinate, Piece? piece)
+    {
+        Squares[coordinate.Row, coordinate.Column] = piece;
     }
 }
