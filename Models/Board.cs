@@ -95,7 +95,7 @@ public class Board
     {
         HashSet<Coordinate> validMoves = new();
         int moveableDirection = context.PieceColour == Colour.white ? -1 : 1;
-        Coordinate currentPosition = context.CurrentPosition;
+        Coordinate currentPosition = context.Position;
 
         Coordinate oneSpace = new(currentPosition.Row + moveableDirection, currentPosition.Column);
         if (GetSquareByCoordinate(oneSpace) is null) validMoves.Add(oneSpace);
@@ -103,7 +103,8 @@ public class Board
         foreach (int columnDelta in new int[] { -1, 1 })
         {
             Coordinate diagonal = new(oneSpace.Row, oneSpace.Column + columnDelta);
-            if (!IsValidMove(context)) continue;
+            PieceContext diagonalContext = new(diagonal, context.PieceColour);
+            if (!IsValidMove(diagonalContext)) continue;
             if (GetSquareByCoordinate(diagonal) is not null) validMoves.Add(diagonal);
         }
 
@@ -172,7 +173,7 @@ public class Board
 
     private bool IsValidMove(PieceContext context)
     {
-        return !(IsOutOfBounds(context.CurrentPosition) ||
+        return !(IsOutOfBounds(context.Position) ||
             IsOccupliedByFriendly(context) ||
             WouldTakeKing(context));
     }
@@ -185,12 +186,12 @@ public class Board
 
     private bool WouldTakeKing(PieceContext context)
     {
-        return !IsOccupliedByFriendly(context) && GetSquareByCoordinate(context.CurrentPosition)?.Type == PieceType.King;
+        return !IsOccupliedByFriendly(context) && GetSquareByCoordinate(context.Position)?.Type == PieceType.King;
     }
 
     private bool IsOccupliedByFriendly(PieceContext context)
     {
-        return GetSquareByCoordinate(context.CurrentPosition)?.Colour == context.PieceColour;
+        return GetSquareByCoordinate(context.Position)?.Colour == context.PieceColour;
     }
 
     private HashSet<Coordinate> GetValidMovesByOffsets(int[] offsets, PieceContext context, Func<Coordinate, bool>? skipDeltaWhere = null)
@@ -204,8 +205,8 @@ public class Board
                 if (skipDeltaWhere is not null && skipDeltaWhere(coordinateDelta)) continue;
 
                 Coordinate newPosition = new(
-                    context.CurrentPosition.Row + rowDelta,
-                    context.CurrentPosition.Column + columnDelta);
+                    context.Position.Row + rowDelta,
+                    context.Position.Column + columnDelta);
 
                 PieceContext newContext = new(newPosition, context.PieceColour);
                 if (IsValidMove(newContext)) validMoves.Add(newPosition);
@@ -217,7 +218,7 @@ public class Board
     private HashSet<Coordinate> GetValidMovesByVectors(Vector[] vectors, PieceContext context)
     {
         HashSet<Coordinate> validMoves = new();
-        Coordinate currentPosition = context.CurrentPosition;
+        Coordinate currentPosition = context.Position;
         foreach (Vector vector in vectors)
         {
             Coordinate lastPosition = currentPosition;
