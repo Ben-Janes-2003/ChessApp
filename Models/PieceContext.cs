@@ -2,4 +2,4 @@
 
 namespace ChessApp.Models;
 
-public record PieceContext(Coordinate CurrentPosition, Colour PieceColour);
+public record PieceContext(Coordinate Position, Colour FriendlyColour);

@@ -8,7 +8,7 @@
         {
             Coordinate coordinate = new(row, col);
             bool isDark = (row + col) % 2 != 0;
-            <div class="square @(isDark ? "dark" : "light") @(Board.EligibleSquaresForSelectedPiece.Contains(coordinate) ? "eligible" : "")">
+            <div class="square @(isDark ? "dark" : "light") @(Board.EligibleSquaresForSelectedPiece.Contains(coordinate) ? "eligible" : "")" @onclick="() => Board.MoveSelectedPieceTo(coordinate)">
                 @{
                     Piece? piece = Board.Squares[row, col];
                     char? symbol = piece?.Symbol;
