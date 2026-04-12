@@ -22,39 +22,16 @@ public class Board
 
     public void Initialise()
     {
-        Squares[0, 0] = new Piece(Colour.Black, PieceType.Rook);
-        Squares[0, 1] = new Piece(Colour.Black, PieceType.Knight);
-        Squares[0, 2] = new Piece(Colour.Black, PieceType.Bishop);
-        Squares[0, 3] = new Piece(Colour.Black, PieceType.Queen);
-        Squares[0, 4] = new Piece(Colour.Black, PieceType.King);
-        Squares[0, 5] = new Piece(Colour.Black, PieceType.Bishop);
-        Squares[0, 6] = new Piece(Colour.Black, PieceType.Knight);
-        Squares[0, 7] = new Piece(Colour.Black, PieceType.Rook);
-        Squares[1, 0] = new Piece(Colour.Black, PieceType.Pawn);
-        Squares[1, 1] = new Piece(Colour.Black, PieceType.Pawn);
-        Squares[1, 2] = new Piece(Colour.Black, PieceType.Pawn);
-        Squares[1, 3] = new Piece(Colour.Black, PieceType.Pawn);
-        Squares[1, 4] = new Piece(Colour.Black, PieceType.Pawn);
-        Squares[1, 5] = new Piece(Colour.Black, PieceType.Pawn);
-        Squares[1, 6] = new Piece(Colour.Black, PieceType.Pawn);
-        Squares[1, 7] = new Piece(Colour.Black, PieceType.Pawn);
+        PieceType[] backRow = { PieceType.Rook, PieceType.Knight, PieceType.Bishop, PieceType.Queen, PieceType.King, PieceType.Bishop, PieceType.Knight, PieceType.Rook };
 
-        Squares[6, 0] = new Piece(Colour.White, PieceType.Pawn);
-        Squares[6, 1] = new Piece(Colour.White, PieceType.Pawn);
-        Squares[6, 2] = new Piece(Colour.White, PieceType.Pawn);
-        Squares[6, 3] = new Piece(Colour.White, PieceType.Pawn);
-        Squares[6, 4] = new Piece(Colour.White, PieceType.Pawn);
-        Squares[6, 5] = new Piece(Colour.White, PieceType.Pawn);
-        Squares[6, 6] = new Piece(Colour.White, PieceType.Pawn);
-        Squares[6, 7] = new Piece(Colour.White, PieceType.Pawn);
-        Squares[7, 0] = new Piece(Colour.White, PieceType.Rook);
-        Squares[7, 1] = new Piece(Colour.White, PieceType.Knight);
-        Squares[7, 2] = new Piece(Colour.White, PieceType.Bishop);
-        Squares[7, 3] = new Piece(Colour.White, PieceType.Queen);
-        Squares[7, 4] = new Piece(Colour.White, PieceType.King);
-        Squares[7, 5] = new Piece(Colour.White, PieceType.Bishop);
-        Squares[7, 6] = new Piece(Colour.White, PieceType.Knight);
-        Squares[7, 7] = new Piece(Colour.White, PieceType.Rook);
+        for (int column = 0; column < 8; column++)
+        {
+            Squares[1, column] = new Piece(Colour.Black, PieceType.Pawn);
+            Squares[6, column] = new Piece(Colour.White, PieceType.Pawn);
+
+            Squares[0, column] = new Piece(Colour.Black, backRow[column]);
+            Squares[7, column] = new Piece(Colour.White, backRow[column]);
+        }
     }
 
     public void MoveSelectedPieceTo(Coordinate position, bool castling = false)
