@@ -94,7 +94,7 @@ public class Board
     private HashSet<Coordinate> GetEligibleSquaresPawn(PieceContext context, bool hasMoved)
     {
         HashSet<Coordinate> validMoves = new();
-        int moveableDirection = context.PieceColour == Colour.white ? -1 : 1;
+        int moveableDirection = context.FriendlyColour == Colour.white ? -1 : 1;
         Coordinate currentPosition = context.Position;
 
         Coordinate oneSpace = new(currentPosition.Row + moveableDirection, currentPosition.Column);
@@ -103,7 +103,7 @@ public class Board
         foreach (int columnDelta in new int[] { -1, 1 })
         {
             Coordinate diagonal = new(oneSpace.Row, oneSpace.Column + columnDelta);
-            PieceContext diagonalContext = new(diagonal, context.PieceColour);
+            PieceContext diagonalContext = new(diagonal, context.FriendlyColour);
             if (!IsValidMove(diagonalContext)) continue;
             if (GetSquareByCoordinate(diagonal) is not null) validMoves.Add(diagonal);
         }
@@ -191,7 +191,7 @@ public class Board
 
     private bool IsOccupliedByFriendly(PieceContext context)
     {
-        return GetSquareByCoordinate(context.Position)?.Colour == context.PieceColour;
+        return GetSquareByCoordinate(context.Position)?.Colour == context.FriendlyColour;
     }
 
     private HashSet<Coordinate> GetValidMovesByOffsets(int[] offsets, PieceContext context, Func<Coordinate, bool>? skipDeltaWhere = null)
@@ -208,7 +208,7 @@ public class Board
                     context.Position.Row + rowDelta,
                     context.Position.Column + columnDelta);
 
-                PieceContext newContext = new(newPosition, context.PieceColour);
+                PieceContext newContext = new(newPosition, context.FriendlyColour);
                 if (IsValidMove(newContext)) validMoves.Add(newPosition);
             }
         }
@@ -225,7 +225,7 @@ public class Board
             while (true)
             {
                 Coordinate newPosition = new(lastPosition.Row + vector.RowDirection, lastPosition.Column + vector.ColumnDirection);
-                if (!IsValidMove(new PieceContext(newPosition, context.PieceColour))) break;
+                if (!IsValidMove(new PieceContext(newPosition, context.FriendlyColour))) break;
                 validMoves.Add(newPosition);
                 lastPosition = newPosition;
                 if (GetSquareByCoordinate(newPosition) is not null) break;
