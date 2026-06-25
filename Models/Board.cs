@@ -17,6 +17,8 @@ public class Board
         } 
     }
 
+    int DirectionOfPlay => CurrentPlayer == Colour.White ? -1 : 1;
+
     private HashSet<Coordinate> _eligibleSquares = new();
     public HashSet<Coordinate> EligibleSquaresForSelectedPiece => _eligibleSquares;
 
@@ -42,19 +44,13 @@ public class Board
             if (previousPosition is null) return;
             SetSquareByCoordinate(position, SelectedPiece);
             SetSquareByCoordinate(previousPosition, null);
+            CheckEnPassantTarget(position);
             SelectedPiece.HasMoved = true;
-            if (SelectedPiece.Type == PieceType.King)
-            {
-                int columnDelta = position.Column - previousPosition.Column;
-                int rookRow = CurrentPlayer == Colour.White ? 7 : 0;
-                if (Math.Abs(columnDelta) == 2)
-                {
-                    Castle(rookRow, columnDelta);
-                    return;
-                }
-            }
+            CheckCastling(position, previousPosition);
             SelectedPiece = null;
-            CurrentPlayer = CurrentPlayer == Colour.White ? Colour.Black : Colour.White;
+            Colour newPlayer = CurrentPlayer == Colour.White ? Colour.Black : Colour.White;
+            HandleEnPassant(newPlayer);
+            CurrentPlayer = newPlayer;
         }
     }
 
@@ -86,18 +82,26 @@ public class Board
         };
     }
 
-    // TODO: Add en passant logic
     private HashSet<Coordinate> GetEligibleSquaresPawn(PieceContext context, bool hasMoved)
     {
         HashSet<Coordinate> validMoves = new();
-        int moveableDirection = context.FriendlyColour == Colour.White ? -1 : 1;
         Coordinate currentPosition = context.Position;
 
-        Coordinate oneSpace = new(currentPosition.Row + moveableDirection, currentPosition.Column);
+        Coordinate oneSpace = new(currentPosition.Row + DirectionOfPlay, currentPosition.Column);
         if (GetSquareByCoordinate(oneSpace) is null) validMoves.Add(oneSpace);
 
         foreach (int columnDelta in new int[] { -1, 1 })
         {
+            Coordinate horizontal = new(currentPosition.Row, currentPosition.Column + columnDelta);
+            PieceContext horizontalContext = new(horizontal, context.FriendlyColour);
+            if (!IsValidMove(horizontalContext)) continue;
+            Piece? horizontalPiece = GetSquareByCoordinate(horizontal);
+            if (horizontalPiece is not null && horizontalPiece.EnPassantTarget)
+            {
+                Coordinate enPassantMove = new(oneSpace.Row, horizontal.Column);
+                validMoves.Add(enPassantMove);
+            }
+
             Coordinate diagonal = new(oneSpace.Row, oneSpace.Column + columnDelta);
             PieceContext diagonalContext = new(diagonal, context.FriendlyColour);
             if (!IsValidMove(diagonalContext)) continue;
@@ -108,7 +112,7 @@ public class Board
 
         if (!hasMoved)
         {
-            Coordinate twoSpaces = new(oneSpace.Row + moveableDirection, currentPosition.Column);
+            Coordinate twoSpaces = new(oneSpace.Row + DirectionOfPlay, currentPosition.Column);
             if (GetSquareByCoordinate(twoSpaces) is null) validMoves.Add(twoSpaces);
         }
         return validMoves;
@@ -292,5 +296,46 @@ public class Board
     private void SetSquareByCoordinate(Coordinate coordinate, Piece? piece)
     {
         Squares[coordinate.Row, coordinate.Column] = piece;
+    }
+
+    private void CheckEnPassantTarget(Coordinate position)
+    {
+        if (SelectedPiece?.Type == PieceType.Pawn && !SelectedPiece.HasMoved && position.Row == 3 || position.Row == 4)
+        {
+            SelectedPiece?.EnPassantTarget = true;
+        }
+    }
+
+    private void CheckCastling(Coordinate position, Coordinate previousPosition)
+    {
+        if (SelectedPiece?.Type == PieceType.King)
+        {
+            int columnDelta = position.Column - previousPosition.Column;
+            int rookRow = CurrentPlayer == Colour.White ? 7 : 0;
+            if (Math.Abs(columnDelta) == 2)
+            {
+                Castle(rookRow, columnDelta);
+                return;
+            }
+        }
+    }
+
+    private void HandleEnPassant(Colour newPlayer)
+    {
+        foreach (Piece? piece in Squares)
+        {
+            if (piece?.Colour == newPlayer && piece.EnPassantTarget)
+            {
+                Coordinate? pieceLocation = GetPieceLocation(piece);
+                if (pieceLocation is null) continue;
+                Coordinate potentialEnPassant = new(pieceLocation.Row + DirectionOfPlay, pieceLocation.Column);
+                Piece? potentialEnPassantPiece = GetSquareByCoordinate(potentialEnPassant);
+                if (potentialEnPassantPiece is not null && potentialEnPassantPiece.Colour != newPlayer)
+                {
+                    Squares[pieceLocation.Row, pieceLocation.Column] = null;
+                }
+                piece.EnPassantTarget = false;
+            }
+        }
     }
 }
