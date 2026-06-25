@@ -8,6 +8,7 @@ public class Piece
     public Colour Colour { get; set; }
     public char Symbol => GetSymbol();
     public bool HasMoved = false;
+    public bool EnPassantTarget = false;
 
     public Piece(Colour colour, PieceType type)
     {
